@@ -27,7 +27,7 @@ async function runCrawler(params) {
         }
         // add items to the queue
         try {
-            const items = await parseItemUrls($, request);
+            const items = await parseItemUrls($, request, input);
             for (const item of items) {
                 await requestQueue.addRequest({
                     url: item.url,
@@ -37,7 +37,8 @@ async function runCrawler(params) {
                         asin: item.asin,
                         detailUrl: item.detailUrl,
                         sellerUrl: item.sellerUrl,
-                        reviewsUrl: item.reviewsUrl
+                        reviewsUrl: item.reviewsUrl,
+                        sponsoredListing: item.sponsoredListing
                     },
                 }, { forefront: true });
             }
@@ -91,6 +92,7 @@ async function runCrawler(params) {
                             itemDetail: request.userData.itemDetail,
                             keyword: request.userData.keyword,
                             asin: request.userData.asin,
+                            sponsoredListing: request.userData.sponsoredListing,
                             detailUrl: request.userData.detailUrl,
                             sellerUrl: request.userData.sellerUrl,
                             sellers: item.sellers,

@@ -6,23 +6,28 @@ const { getOriginUrl } = require('./utils');
 
 const { log } = Apify.utils;
 
-async function extractItemDetails($, request) {
+async function extractItemDetails($, request, input) {
+    let itemSelector = '.s-result-list [data-asin]';
+    if(input.skipSponsored)
+        itemSelector += ':not(.AdHolder)';
     const originUrl = await getOriginUrl(request);
     const itemUrls = [];
-    const items = $('.s-result-list [data-asin]');
+    const items = $(itemSelector);
     if (items.length !== 0) {
         items.each(function () {
             const asin = $(this).attr('data-asin');
             const sellerUrl = `${originUrl}/gp/offer-listing/${asin}`;
             const itemUrl = `${originUrl}/dp/${asin}`;
             const reviewsUrl = `${originUrl}/product-reviews/${asin}`;
+            const sponsoredListing = $(this).hasClass('AdHolder');
             if (asin) {
                 itemUrls.push({
                     url: itemUrl,
                     asin,
                     detailUrl: itemUrl,
                     sellerUrl,
-                    reviewsUrl
+                    reviewsUrl,
+                    sponsoredListing
                 });
             }
         });
@@ -30,8 +35,8 @@ async function extractItemDetails($, request) {
     return itemUrls;
 }
 
-async function parseItemUrls($, request) {
-    const urls = await extractItemDetails($, request);
+async function parseItemUrls($, request, input) {
+    const urls = await extractItemDetails($, request, input);
     log.info(`Found ${urls.length} on a site, going to crawl them. URL: ${request.url}`);
     return urls;
 }

@@ -3,7 +3,7 @@ const Apify = require('apify');
 const { log } = Apify.utils;
 
 async function parseItemDetail($, request, requestQueue, getReviews) {
-    const { sellerUrl, asin, detailUrl, reviewsUrl, delivery } = request.userData;
+    const { sellerUrl, asin, detailUrl, reviewsUrl, delivery, sponsoredListing } = request.userData;
     const item = {};
     const reviewsConunt = $('#acrCustomerReviewText').length !== 0 ? $('#acrCustomerReviewText').eq(0).text() : null;
     const stars = $('.reviewCountTextLinkedHistogram').length !== 0 ? $('.reviewCountTextLinkedHistogram').attr('title').match(/(\d+\.\d+)|\d+/)[0] : null;
@@ -67,6 +67,7 @@ async function parseItemDetail($, request, requestQueue, getReviews) {
                 detailUrl,
                 sellerUrl,
                 itemDetail: item,
+                sponsoredListing,
                 label: 'reviews',
             },
         }, { forefront: true });
@@ -78,6 +79,7 @@ async function parseItemDetail($, request, requestQueue, getReviews) {
                 detailUrl,
                 sellerUrl,
                 itemDetail: item,
+                sponsoredListing,
                 label: 'seller',
             },
         }, { forefront: true });

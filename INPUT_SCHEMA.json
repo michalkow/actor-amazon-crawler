@@ -145,6 +145,13 @@
       "description": "Number of results you would like to save in total.",
       "editor": "number"
     },
+    "skipSponsored": {
+        "title": "Skip Sponsored Listings",
+        "type": "boolean",
+        "description": "Check if you don't want to scrape sponsored listings",
+        "editor": "checkbox",
+        "default": false
+    },
     "proxy": {
         "title": "Proxy configuration",
         "type": "object",

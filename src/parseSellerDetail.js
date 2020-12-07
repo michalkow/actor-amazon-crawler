@@ -98,9 +98,10 @@ async function parseSellerDetail($, request) {
     } else {
         item.sellers = sellers;
     }
-    const { keyword, asin, detailUrl, sellerUrl, country, itemDetail } = request.userData;
+    const { keyword, asin, detailUrl, sellerUrl, country, itemDetail, sponsoredListing } = request.userData;
     item.keyword = keyword;
     item.asin = asin;
+    item.sponsoredListing = sponsoredListing;
     item.itemDetailUrl = detailUrl;
     item.sellerOffersUrl = sellerUrl;
     item.country = country;
