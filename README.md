@@ -1,12 +1,15 @@
 # Amazon Scraper
 
-- [Features](#features)
-- [Sample result](#sample-result)
-- [Proxy](#proxy)
-- [Asin crawling](#asin-crawling)
-- [Direct URLs crawling](#direct-urls-crawling)
-- [Compute unit consumption](#compute-unit-consumption)
-- [Changelog](#changelog)
+- [Amazon Scraper](#amazon-scraper)
+  - [Features](#features)
+  - [Sample result](#sample-result)
+  - [Proxy](#proxy)
+  - [Asin crawling](#asin-crawling)
+  - [Direct URLs crawling](#direct-urls-crawling)
+  - [Additional options](#additional-options)
+  - [Compute unit consumption](#compute-unit-consumption)
+  - [Supported countries](#supported-countries)
+  - [Changelog](#changelog)
 
 ## Features
 
@@ -42,6 +45,7 @@ Find out more about why you should use this scraper for your business and sugges
     }
   ],
   "asin": "B010N07D4W",
+  "sponsoredListing": false,
   "itemDetailUrl": "https://www.amazon.com/dp/B010N07D4W",
   "sellerOffersUrl": "https://www.amazon.com/gp/offer-listing/B010N07D4W",
   "currency": "USD",
