@@ -13,23 +13,11 @@ async function runCrawler(params) {
     // log.info($('#nav-global-location-slot').text())
     const urlOrigin = await getOriginUrl(request);
     if (label === 'page') {
-        // solve pagination if on the page, now support two layouts
-        const enqueuePagination = await parsePaginationUrl($, request);
-        if (enqueuePagination !== false) {
-            const urlParams = new URLSearchParams(enqueuePagination);
-            log.info(`Adding new pagination of search ${enqueuePagination}`);
-            await requestQueue.addRequest({
-                url: enqueuePagination,
-                userData: {
-                    label: 'page',
-                    pageNumber: urlParams.get('page'),
-                    keyword: request.userData.keyword,
-                },
-            });
-        }
+        let items = [];
+        const { resultCount = 0 } = request.userData;
         // add items to the queue
         try {
-            const items = await parseItemUrls($, request, input);
+            items = await parseItemUrls($, request, input);
             for (const item of items) {
                 await requestQueue.addRequest({
                     url: item.url,
@@ -59,6 +47,22 @@ async function runCrawler(params) {
                 status: 'No items for this keyword.',
                 url: request.url,
                 keyword: request.userData.keyword,
+            });
+        }
+        // solve pagination if on the page, now support two layouts
+        const totalResultCount = resultCount + items.length;
+        const enqueuePagination = await parsePaginationUrl($, request);
+        if (enqueuePagination !== false && totalResultCount < input.maxResults) {
+            const urlParams = new URLSearchParams(enqueuePagination);
+            log.info(`Adding new pagination of search ${enqueuePagination}`);
+            await requestQueue.addRequest({
+                url: enqueuePagination,
+                userData: {
+                    label: 'page',
+                    resultCount: totalResultCount,
+                    pageNumber: parseInt(urlParams.get('page')),
+                    keyword: request.userData.keyword,
+                },
             });
         }
         // extract info about item and about seller offers

@@ -79,6 +79,7 @@ async function parseItemDetail($, request, requestQueue, getReviews) {
             userData: {
                 asin,
                 pageNumber,
+                pagePosition,
                 detailUrl,
                 sellerUrl,
                 itemDetail: item,

@@ -134,10 +134,10 @@ Apify.main(async () => {
         handlePageFunction: async ({ page, request, session }) => {
             const { url, userData, userData: { label } } = request;
             try {
-                await sleep(3000);
+                await sleep(10000);
                 await page.waitForSelector('#a-popover-root');
             } catch (e) {
-                await sleep(10000);
+                await sleep(30000);
                 await page.waitForSelector('body')
             }
             if(input.deliver !== ''){

@@ -22,7 +22,7 @@ async function extractItemDetails($, request, input) {
             const itemUrl = `${originUrl}/dp/${asin}`;
             const reviewsUrl = `${originUrl}/product-reviews/${asin}`;
             const sponsoredListing = $(this).hasClass('AdHolder');
-            if (asin && index <= input.maxResults) {
+            if (asin && pagePosition <= input.maxResults) {
                 itemUrls.push({
                     pagePosition,
                     pageNumber,
