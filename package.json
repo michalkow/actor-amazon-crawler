@@ -6,16 +6,19 @@
 	"dependencies": {
 		"apify": "^0.19.1",
 		"cheerio": "^1.0.0-rc.3",
+		"commander": "^6.2.1",
+		"jsonfile": "^6.1.0",
 		"parse-price": "^1.1.8",
 		"query-string": "^6.8.1",
 		"request-promise": "^4.2.4",
+		"shelljs": "^0.8.4",
 		"url": "^0.11.0",
 		"url-parse": "^1.4.7"
 	},
 	"devDependencies": {},
 	"scripts": {
-        "start": "node ./src/main.js",
-        "cleanSession": "rm -r apify_storage/key_value_stores/amazon-sessions && rm -r apify_storage/request_queues && rm -r apify_storage/datasets"
+		"start": "node ./src/main.js",
+		"cleanSession": "rm -r apify_storage/key_value_stores/amazon-sessions && rm -r apify_storage/request_queues && rm -r apify_storage/datasets"
 	},
 	"repository": {
 		"type": "git",
