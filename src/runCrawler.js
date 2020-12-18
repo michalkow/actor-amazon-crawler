@@ -34,6 +34,7 @@ async function runCrawler(params) {
                     userData: {
                         label: 'detail',
                         keyword: request.userData.keyword,
+                        position: item.position,
                         asin: item.asin,
                         detailUrl: item.detailUrl,
                         sellerUrl: item.sellerUrl,
@@ -89,6 +90,7 @@ async function runCrawler(params) {
                         url: paginationUrlSeller,
                         userData: {
                             label: 'seller',
+                            position: request.userData.position,
                             itemDetail: request.userData.itemDetail,
                             keyword: request.userData.keyword,
                             asin: request.userData.asin,
