@@ -17,8 +17,7 @@
 	},
 	"devDependencies": {},
 	"scripts": {
-		"start": "node ./src/main.js",
-		"cleanSession": "rm -r apify_storage/key_value_stores/amazon-sessions && rm -r apify_storage/request_queues && rm -r apify_storage/datasets"
+        "start": "node ./src/main.js"
 	},
 	"repository": {
 		"type": "git",

@@ -17,7 +17,7 @@ async function runCrawler(params) {
         const { resultCount = 0 } = request.userData;
         // add items to the queue
         try {
-            items = await parseItemUrls($, request, input);
+            items = await parseItemUrls($, request, input, resultCount);
             for (const item of items) {
                 await requestQueue.addRequest({
                     url: item.url,

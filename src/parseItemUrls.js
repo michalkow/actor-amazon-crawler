@@ -6,7 +6,8 @@ const { getOriginUrl } = require('./utils');
 
 const { log } = Apify.utils;
 
-async function extractItemDetails($, request, input) {
+async function extractItemDetails($, request, input, resultCount) {
+    let itemCount = 0;
     let itemSelector = '.s-result-list [data-asin]';
     if(input.skipSponsored)
         itemSelector += ':not(.AdHolder)';
@@ -15,32 +16,34 @@ async function extractItemDetails($, request, input) {
     const itemUrls = [];
     const items = $(itemSelector);
     if (items.length !== 0) {
-        items.each(function (index) {
-            const pagePosition = index + 1;
+        items.each(function () {
             const asin = $(this).attr('data-asin');
             const sellerUrl = `${originUrl}/gp/offer-listing/${asin}`;
             const itemUrl = `${originUrl}/dp/${asin}`;
             const reviewsUrl = `${originUrl}/product-reviews/${asin}`;
             const sponsoredListing = $(this).hasClass('AdHolder');
-            if (asin && pagePosition <= input.maxResults) {
-                itemUrls.push({
-                    pagePosition,
-                    pageNumber,
-                    url: itemUrl,
-                    asin,
-                    detailUrl: itemUrl,
-                    sellerUrl,
-                    reviewsUrl,
-                    sponsoredListing
-                });
+            log.info(`Found ${itemCount} each: ${input.maxResults}`);
+            if (asin) {
+                itemCount++;
+                if ((resultCount + itemCount) <= input.maxResults)
+                    itemUrls.push({
+                        pagePosition: itemCount,
+                        pageNumber,
+                        url: itemUrl,
+                        asin,
+                        detailUrl: itemUrl,
+                        sellerUrl,
+                        reviewsUrl,
+                        sponsoredListing
+                    });
             }
         });
     }
     return itemUrls;
 }
 
-async function parseItemUrls($, request, input) {
-    const urls = await extractItemDetails($, request, input);
+async function parseItemUrls($, request, input, resultCount) {
+    const urls = await extractItemDetails($, request, input, resultCount);
     log.info(`Found ${urls.length} on a site, going to crawl them. URL: ${request.url}`);
     return urls;
 }
