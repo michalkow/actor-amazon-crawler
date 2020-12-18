@@ -16,11 +16,13 @@ async function runCrawler(params) {
         // solve pagination if on the page, now support two layouts
         const enqueuePagination = await parsePaginationUrl($, request);
         if (enqueuePagination !== false) {
+            const urlParams = new URLSearchParams(enqueuePagination);
             log.info(`Adding new pagination of search ${enqueuePagination}`);
             await requestQueue.addRequest({
                 url: enqueuePagination,
                 userData: {
                     label: 'page',
+                    pageNumber: urlParams.get('page'),
                     keyword: request.userData.keyword,
                 },
             });
@@ -34,7 +36,8 @@ async function runCrawler(params) {
                     userData: {
                         label: 'detail',
                         keyword: request.userData.keyword,
-                        position: item.position,
+                        pageNumber: request.userData.pageNumber || 1,
+                        pagePosition: item.pagePosition,
                         asin: item.asin,
                         detailUrl: item.detailUrl,
                         sellerUrl: item.sellerUrl,
@@ -90,7 +93,8 @@ async function runCrawler(params) {
                         url: paginationUrlSeller,
                         userData: {
                             label: 'seller',
-                            position: request.userData.position,
+                            pageNumber: request.userData.pageNumber,
+                            pagePosition: request.userData.pagePosition,
                             itemDetail: request.userData.itemDetail,
                             keyword: request.userData.keyword,
                             asin: request.userData.asin,

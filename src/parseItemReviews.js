@@ -4,7 +4,7 @@ const { log } = Apify.utils;
 
 async function parseItemReviews($, request, requestQueue) {
     const { url, userData } = request;
-    const { position, asin, sellerUrl, itemDetail, detailUrl, sponsoredListing } = userData;
+    const { pagePosition, pageNumber, asin, sellerUrl, itemDetail, detailUrl, sponsoredListing } = userData;
     const reviews = itemDetail.reviews ? itemDetail.reviews : [];
     const host = userData.host ? userData.host : url.slice(0,url.indexOf("product-reviews") - 1)
     userData.host = host;
@@ -37,7 +37,8 @@ async function parseItemReviews($, request, requestQueue) {
             url: sellerUrl,
             userData: {
                 asin,
-                position,
+                pageNumber,
+                pagePosition,
                 detailUrl,
                 sellerUrl,
                 itemDetail,

@@ -10,20 +10,22 @@ async function extractItemDetails($, request, input) {
     let itemSelector = '.s-result-list [data-asin]';
     if(input.skipSponsored)
         itemSelector += ':not(.AdHolder)';
+    const { pageNumber } = request.userData;
     const originUrl = await getOriginUrl(request);
     const itemUrls = [];
     const items = $(itemSelector);
     if (items.length !== 0) {
         items.each(function (index) {
-            const position = index + 1;
+            const pagePosition = index + 1;
             const asin = $(this).attr('data-asin');
             const sellerUrl = `${originUrl}/gp/offer-listing/${asin}`;
             const itemUrl = `${originUrl}/dp/${asin}`;
             const reviewsUrl = `${originUrl}/product-reviews/${asin}`;
             const sponsoredListing = $(this).hasClass('AdHolder');
-            if (asin) {
+            if (asin && index <= input.maxResults) {
                 itemUrls.push({
-                    position,
+                    pagePosition,
+                    pageNumber,
                     url: itemUrl,
                     asin,
                     detailUrl: itemUrl,
