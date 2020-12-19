@@ -22,7 +22,6 @@ async function extractItemDetails($, request, input, resultCount) {
             const itemUrl = `${originUrl}/dp/${asin}`;
             const reviewsUrl = `${originUrl}/product-reviews/${asin}`;
             const sponsoredListing = $(this).hasClass('AdHolder');
-            log.info(`Found ${itemCount} each: ${input.maxResults}`);
             if (asin) {
                 itemCount++;
                 if ((resultCount + itemCount) <= input.maxResults)

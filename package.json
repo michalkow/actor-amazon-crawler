@@ -1,13 +1,16 @@
 {
-	"name": "amazon",
+	"name": "amazon-crawler",
 	"version": "1.0.0",
 	"description": "Crawl a number of web pages using headless Chrome and Puppeteer",
-	"main": "main.js",
+	"main": "bin/index.js",
+	"bin": "bin/index.js",
 	"dependencies": {
 		"apify": "^0.19.1",
 		"cheerio": "^1.0.0-rc.3",
 		"commander": "^6.2.1",
+		"inquirer": "^7.3.3",
 		"jsonfile": "^6.1.0",
+		"lodash": "^4.17.20",
 		"parse-price": "^1.1.8",
 		"query-string": "^6.8.1",
 		"request-promise": "^4.2.4",
@@ -17,7 +20,7 @@
 	},
 	"devDependencies": {},
 	"scripts": {
-        "start": "node ./src/main.js"
+		"start": "node ./src/main.js"
 	},
 	"repository": {
 		"type": "git",
