@@ -4,9 +4,9 @@ const Apify = require('apify');
 const { log } = Apify.utils;
 function changePageParam(param, request) {
     if (request.url.indexOf('page=') === -1) {
-        return `${request.url}&${param}`;
+        return `${request.url}&page=${param}`;
     }
-    return request.url.replace(/page=\d+/, param);
+    return request.url.replace(/page=\d+/, `page=${param}`);
 }
 
 async function parsePaginationUrl($, request) {
@@ -48,4 +48,4 @@ async function parsePaginationUrl($, request) {
     return false;
 }
 
-module.exports = parsePaginationUrl;
+module.exports = { changePageParam, parsePaginationUrl };

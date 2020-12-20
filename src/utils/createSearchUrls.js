@@ -3,7 +3,9 @@ const Apify = require('apify');
 const { log } = Apify.utils;
 
 function getCatPath(category) {
-    return `&i=${category}`;
+    if (category)
+        return `&i=${category}`;
+    return '';
 }
 
 function getBaseUrl(country) {
@@ -102,11 +104,12 @@ async function createSearchUrls(input) {
                     const keywords = input.search.split(',');
                     for (const keyword of keywords) {
                         urlsToProcess.push({
-                            url: `${searchUrlBase}s?k=${keyword.replace(/\s+/g, '+').trim()}&i=${cat}&ref=nb_sb_noss`,
+                            url: `${searchUrlBase}s?k=${keyword.replace(/\s+/g, '+').trim()}${cat}&ref=nb_sb_noss`,
                             userData: {
                                 label: 'page',
                                 keyword,
-                                domain: searchUrlBase
+                                pageNumber: 1,
+                                resultCount: 0,
                             },
                         });
                     }
@@ -116,7 +119,8 @@ async function createSearchUrls(input) {
                         userData: {
                             label: 'page',
                             keyword: input.search,
-                            domain: searchUrlBase
+                            pageNumber: 1,
+                            resultCount: 0,
                         },
                     });
                 }

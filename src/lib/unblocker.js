@@ -42,13 +42,13 @@ class CloudFlareUnBlocker {
             this._throwError('Session is being renewed');
         }
 
-        const proxyUrl = this._getProxyUrl(session);
+        //const proxyUrl = this._getProxyUrl(session);
         // this._log(proxyUrl);
         const cookieString = session.getCookieString(request.url) ;
 
         const requestOptions = {
             headers: this._getBrowserHeaders(cookieString),
-            proxyUrl,
+            //proxyUrl,
             followRedirect: true,
         };
 

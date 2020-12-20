@@ -14,9 +14,8 @@ const SESSIONS_PATH = path.join(__dirname, '../apify_storage/key_value_stores/am
 const QUEUES_PATH = path.join(__dirname, '../apify_storage/request_queues');
 const INPUT_PATH = path.join(__dirname, '../apify_storage/key_value_stores/default/INPUT.json');
 const INPUT_DEFAULTS = {
-    scraper: true,
+    scraper: false,
     country: "US",
-    category: "aps",
     searchType: "keywords",
     maxResults: 100,
     proxy: {

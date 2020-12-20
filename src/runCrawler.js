@@ -1,30 +1,30 @@
 const Apify = require('apify');
-const parseSellerDetail = require('./parseSellerDetail');
-const { parseItemUrls } = require('./parseItemUrls');
-const parsePaginationUrl = require('./parsePaginationUrl');
-const { saveItem, getOriginUrl } = require('./utils');
-const detailParser = require('./parseItemDetail');
-const { parseItemReviews } = require('./parseItemReviews');
+const parseSellerDetail = require('./parsers/parseSellerDetail');
+const { parseItemUrls } = require('./parsers/parseItemUrls');
+const { changePageParam } = require('./parsers/parsePaginationUrl');
+const detailParser = require('./parsers/parseItemDetail');
+const { parseItemReviews } = require('./parsers/parseItemReviews');
+const { saveItem, getOriginUrl } = require('./utils/utils');
 const { log } = Apify.utils;
-async function runCrawler(params) {
-    const {$, session, request, requestQueue, input, getReviews, env} = params;
-    request.userData.maxReviews = input.maxReviews;
-    const { label } = request.userData;
+
+async function runCrawler({ $, session, request, requestQueue, input, env }) {
+    const { label, maxReviews } = request.userData;
+    const getReviews = maxReviews && maxReviews > 0;
     // log.info($('#nav-global-location-slot').text())
     const urlOrigin = await getOriginUrl(request);
     if (label === 'page') {
-        let items = [];
-        const { resultCount = 0 } = request.userData;
+        const { resultCount, pageNumber } = request.userData;
         // add items to the queue
         try {
-            items = await parseItemUrls($, request, input, resultCount);
+            const items = await parseItemUrls($, request, input);
+            log.info('items: ' + items.length);
             for (const item of items) {
                 await requestQueue.addRequest({
                     url: item.url,
                     userData: {
                         label: 'detail',
                         keyword: request.userData.keyword,
-                        pageNumber: request.userData.pageNumber || 1,
+                        pageNumber,
                         pagePosition: item.pagePosition,
                         asin: item.asin,
                         detailUrl: item.detailUrl,
@@ -41,28 +41,31 @@ async function runCrawler(params) {
                     url: request.url,
                     keyword: request.userData.keyword,
                 });
+            } else {
+                // solve pagination if on the page, now support two layouts
+                const totalResultCount = resultCount + items.length;
+                const enqueuePagination = changePageParam(pageNumber + 1, request)
+                log.info(`Got ${totalResultCount} out of ${input.maxResults}. Continue: ${totalResultCount < input.maxResults}`)
+                if (enqueuePagination !== false && totalResultCount < input.maxResults) {
+                    log.info(`Adding new pagination of search ${enqueuePagination}`);
+                    await requestQueue.addRequest({
+                        url: enqueuePagination,
+                        userData: {
+                            label: 'page',
+                            resultCount: totalResultCount,
+                            pageNumber: pageNumber + 1,
+                            keyword: request.userData.keyword,
+
+                        },
+                    });
+
+                }
             }
         } catch (error) {
             await Apify.pushData({
                 status: 'No items for this keyword.',
                 url: request.url,
                 keyword: request.userData.keyword,
-            });
-        }
-        // solve pagination if on the page, now support two layouts
-        const totalResultCount = resultCount + items.length;
-        const enqueuePagination = await parsePaginationUrl($, request);
-        if (enqueuePagination !== false && totalResultCount < input.maxResults) {
-            const urlParams = new URLSearchParams(enqueuePagination);
-            log.info(`Adding new pagination of search ${enqueuePagination}`);
-            await requestQueue.addRequest({
-                url: enqueuePagination,
-                userData: {
-                    label: 'page',
-                    resultCount: totalResultCount,
-                    pageNumber: parseInt(urlParams.get('page')),
-                    keyword: request.userData.keyword,
-                },
             });
         }
         // extract info about item and about seller offers

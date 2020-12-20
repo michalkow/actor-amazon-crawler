@@ -2,7 +2,7 @@
 const parsePrice = require('parse-price');
 const queryString = require('query-string');
 const parseUrl = require('url-parse');
-const { getCurrency } = require('./utils.js');
+const { getCurrency } = require('../utils/utils.js');
 
 function extractInfo($) {
     const h1 = $('h1');

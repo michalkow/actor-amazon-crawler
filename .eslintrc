@@ -1,15 +1,14 @@
 {
-    "extends": ["airbnb-base"],
+    "extends": [
+        "esnext",
+        "esnext/style-guide",
+        "node",
+        "node/style-guide"
+    ],
     "plugins": [
         "import",
         "promise"
     ],
-    "parserOptions": {
-        "ecmaVersion": 2018,
-        "ecmaFeatures": {
-            "jsx": true
-        }
-    },
     "globals": {
         "Npm": true,
         "document": true,
