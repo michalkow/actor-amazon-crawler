@@ -62,7 +62,7 @@ module.exports = function ({ requestQueue, input, env }) {
                 request.retryCount--;
                 // dont retry the request right away, wait a little bit
                 await Apify.utils.sleep(5000);
-                throw new Error('Session blocked, retiring. If you see this for a LONG time, stop the run - you don\'t have any working proxy right now.' + ' But by default this can happen for some time until we find working session.');
+                throw new Error('Session blocked, retiring. If you see this for a LONG time, stop the run - you don\'t have any working proxy right now. But by default this can happen for some time until we find working session.');
             }
             await runCrawler({ $, session, request, requestQueue, input, env });
         },
