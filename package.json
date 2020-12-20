@@ -1,6 +1,6 @@
 {
 	"name": "amazon-crawler",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Crawl a number of web pages using headless Chrome and Puppeteer",
 	"main": "bin/index.js",
 	"bin": "bin/index.js",

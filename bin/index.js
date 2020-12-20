@@ -72,6 +72,13 @@ function clean (options = {}) {
     shell.echo('Clean up complete.');
 }
 
+function update(options = {}) {
+    if (options.clean)
+        clean({ all: true });
+    shell.exec('npm install -g https://github.com/michalkow/actor-amazon-crawler.git#master');
+    shell.echo('Update complete.');
+}
+
 function keyword(options = {}) {
     if (!shell.test('-f', INPUT_PATH)) {
         shell.mkdir('-p', path.join(__dirname, '../apify_storage/key_value_stores/default'));
@@ -124,6 +131,12 @@ program
     .option("-o, --output [path]", "set path for output file")
     .description('join all the files in dataset folder')
     .action(dataset);
+
+program
+    .command('update')
+    .option("-c, --clean", "clean all data before update")
+    .description('update amazon crawler')
+    .action(update);
 
 // program
 //     .command('setup')
